@@ -1,73 +1,123 @@
-# Welcome to your Lovable project
+# Driver Admin Portal
 
-## Project info
+A comprehensive admin portal for managing drivers, vehicles, and transportation operations.
 
-**URL**: https://lovable.dev/projects/fee1820a-cb36-4a9a-bf70-2c8ca37a3a23
+## Features
 
-## How can I edit this code?
+- **Driver Management**: Add, edit, and manage driver profiles
+- **Vehicle Tracking**: Monitor vehicle status and assignments
+- **Route Management**: Plan and optimize delivery routes
+- **Analytics Dashboard**: Real-time insights and reporting
+- **User Authentication**: Secure role-based access control
+- **Document Management**: Handle driver licenses, certifications, and vehicle documents
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Frontend**: React.js / Vue.js / Angular
+- **Backend**: Node.js / Express / Python (Django/Flask)
+- **Database**: PostgreSQL / MongoDB
+- **Authentication**: JWT / OAuth 2.0
+- **Styling**: Tailwind CSS / Material-UI
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/fee1820a-cb36-4a9a-bf70-2c8ca37a3a23) and start prompting.
+## Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js (v16 or higher)
+- npm or yarn
+- Database (PostgreSQL/MongoDB)
+- Git
 
-**Use your preferred IDE**
+## Installation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/Driver-Admin-Portal.git
+cd Driver-Admin-Portal
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+2. Install dependencies:
+```bash
+npm install
+```
 
-Follow these steps:
+3. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+4. Run database migrations:
+```bash
+npm run migrate
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+5. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Environment Variables
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```env
+DATABASE_URL=your_database_url
+JWT_SECRET=your_jwt_secret
+API_PORT=3000
+NODE_ENV=development
+```
 
-**Use GitHub Codespaces**
+## Project Structure
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```
+Driver-Admin-Portal/
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── pages/          # Application pages
+│   ├── services/       # API service layer
+│   ├── utils/          # Helper functions
+│   ├── routes/         # Route definitions
+│   └── models/         # Database models
+├── public/             # Static assets
+├── tests/              # Test files
+└── config/             # Configuration files
+```
 
-## What technologies are used for this project?
+## Available Scripts
 
-This project is built with:
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run test` - Run tests
+- `npm run lint` - Lint code
+- `npm run format` - Format code
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## API Documentation
 
-## How can I deploy this project?
+API endpoints are available at `/api/docs` when running the server.
 
-Simply open [Lovable](https://lovable.dev/projects/fee1820a-cb36-4a9a-bf70-2c8ca37a3a23) and click on Share -> Publish.
+Key endpoints:
+- `GET /api/drivers` - List all drivers
+- `POST /api/drivers` - Create new driver
+- `PUT /api/drivers/:id` - Update driver
+- `DELETE /api/drivers/:id` - Delete driver
 
-## Can I connect a custom domain to my Lovable project?
+## Contributing
 
-Yes, you can!
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## License
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For issues and questions, please open an issue on GitHub or contact support@example.com.
+
+## Roadmap
+
+- [ ] Mobile application
+- [ ] Real-time GPS tracking
+- [ ] Advanced analytics
+- [ ] Multi-language support
+- [ ] Integration with third-party logistics platforms
