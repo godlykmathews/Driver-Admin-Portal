@@ -65,6 +65,7 @@ import {
   FileText,
   Calendar,
   RefreshCw,
+  MapPin,
 } from "lucide-react";
 import { apiService, Invoice } from "@/lib/api";
 import { toast } from "sonner";
@@ -258,7 +259,7 @@ const AdminDashboard = () => {
 
   const userRole = localStorage.getItem("user_role") as string | null;
   const userBranches = JSON.parse(
-    localStorage.getItem("user_branches") || "[]"
+    localStorage.getItem("user_branches") || "[]",
   );
   const userName = localStorage.getItem("driver_name");
   const availableBranches = branches.filter((b) => b.is_active);
@@ -298,7 +299,7 @@ const AdminDashboard = () => {
       console.log("Driver filter changed:", invoiceDriverFilter);
       fetchAvailableRoutes(
         invoiceDriverFilter !== "all" ? invoiceDriverFilter : undefined,
-        isSuperAdmin && invoiceBranchFilter ? invoiceBranchFilter : undefined
+        isSuperAdmin && invoiceBranchFilter ? invoiceBranchFilter : undefined,
       );
     } else {
       console.log("Clearing routes - no driver selected");
@@ -343,7 +344,7 @@ const AdminDashboard = () => {
       let filteredDrivers = allDrivers;
       if (userRole === "admin") {
         filteredDrivers = allDrivers.filter((driver) =>
-          driver.branches.some((branch) => userBranches.includes(branch))
+          driver.branches.some((branch) => userBranches.includes(branch)),
         );
       }
 
@@ -483,13 +484,13 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
     try {
       // Upload CSV for each selected driver
       const uploadPromises = csvData.assignedDrivers.map((driverId) =>
-        apiService.uploadCSV(driverId, csvData.file!, csvData.routeName)
+        apiService.uploadCSV(driverId, csvData.file!, csvData.routeName),
       );
 
       await Promise.all(uploadPromises);
 
       toast.success(
-        `CSV uploaded successfully for ${csvData.assignedDrivers.length} driver(s)`
+        `CSV uploaded successfully for ${csvData.assignedDrivers.length} driver(s)`,
       );
       setCsvData({
         file: null,
@@ -502,7 +503,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
 
       // Reset file input
       const fileInput = document.getElementById(
-        "csv-upload"
+        "csv-upload",
       ) as HTMLInputElement;
       if (fileInput) fileInput.value = "";
 
@@ -573,7 +574,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
     } catch (error) {
       console.error("Failed to create driver:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to create driver"
+        error instanceof Error ? error.message : "Failed to create driver",
       );
     }
   };
@@ -592,7 +593,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
 
     try {
       const response = await apiService.createTemporaryDriver(
-        newTempDriver.selectedBranches
+        newTempDriver.selectedBranches,
       );
 
       // Assuming the response contains the created driver data and credentials
@@ -678,7 +679,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
   // Invoice Management Functions
   const fetchInvoicesData = async (
     page: number = 1,
-    branchFilterOverride?: string
+    branchFilterOverride?: string,
   ) => {
     // For super admin, only fetch if a branch is selected
     const currentBranchFilter =
@@ -739,7 +740,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
         console.log("Route filter selected:", invoiceRouteFilter);
         console.log("Available routes:", availableRoutes);
         const selectedRoute = availableRoutes.find(
-          (r) => r.route_display === invoiceRouteFilter
+          (r) => r.route_display === invoiceRouteFilter,
         );
         console.log("Selected route:", selectedRoute);
         if (selectedRoute) {
@@ -836,7 +837,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
 
   const fetchAvailableRoutes = async (
     driverName?: string,
-    branchId?: string
+    branchId?: string,
   ) => {
     try {
       const filters: any = {};
@@ -848,7 +849,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
           filters.driver_id = driverId;
         } else {
           console.warn(
-            `Could not find driver ID for driver name: ${driverName}`
+            `Could not find driver ID for driver name: ${driverName}`,
           );
           setAvailableRoutes([]);
           return;
@@ -883,7 +884,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
     toast.success(
       `Printing ${selectedInvoices.length} invoice${
         selectedInvoices.length > 1 ? "s" : ""
-      }...`
+      }...`,
     );
 
     // In a real implementation, this would trigger print jobs for selected invoices
@@ -905,18 +906,18 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
       toast.success(
         `Preparing ${selectedInvoices.length} PDF${
           selectedInvoices.length > 1 ? "s" : ""
-        } for download...`
+        } for download...`,
       );
       await apiService.bulkDownloadPDFs(selectedInvoices);
       toast.success(
         `Successfully downloaded ${selectedInvoices.length} PDF${
           selectedInvoices.length > 1 ? "s" : ""
-        }`
+        }`,
       );
     } catch (error) {
       console.error("Bulk download failed:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to download PDFs"
+        error instanceof Error ? error.message : "Failed to download PDFs",
       );
     }
   };
@@ -926,7 +927,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
       // Check if we have active route filter
       if (invoiceRouteFilter === "all" || !invoiceRouteFilter) {
         toast.error(
-          "Please select a specific route to generate route-wise PDF"
+          "Please select a specific route to generate route-wise PDF",
         );
         return;
       }
@@ -940,7 +941,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
 
       if (selectedDriverName && selectedDriverName !== "all") {
         const driverData = drivers.find(
-          (d) => d.driver_name === selectedDriverName
+          (d) => d.driver_name === selectedDriverName,
         );
         if (driverData) {
           driverId = parseInt(driverData.id);
@@ -967,7 +968,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
     } catch (error) {
       console.error("Route PDF generation failed:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to generate route PDF"
+        error instanceof Error ? error.message : "Failed to generate route PDF",
       );
     }
   };
@@ -1019,7 +1020,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
       toast.info(
         `Viewing details for ${
           invoice.invoice_number || invoice.invoice_id || "N/A"
-        }`
+        }`,
       );
     }
   };
@@ -1065,7 +1066,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
   const removeAssignedDriver = (driverIdToRemove: string) => {
     setCsvData((prev) => {
       const newAssignedDrivers = prev.assignedDrivers.filter(
-        (id) => id !== driverIdToRemove
+        (id) => id !== driverIdToRemove,
       );
 
       return { ...prev, assignedDrivers: newAssignedDrivers };
@@ -1096,7 +1097,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
     setNewDriver((prev) => ({
       ...prev,
       selectedBranches: prev.selectedBranches.filter(
-        (b) => b !== branchIdToRemove
+        (b) => b !== branchIdToRemove,
       ),
     }));
   };
@@ -1124,7 +1125,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
       return adminBranchName === branchName;
     });
     const branchDrivers = drivers.filter((d) =>
-      (d.branches || []).includes(branchName)
+      (d.branches || []).includes(branchName),
     );
 
     return {
@@ -1169,7 +1170,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
     } catch (error) {
       console.error("Failed to create branch:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to create branch"
+        error instanceof Error ? error.message : "Failed to create branch",
       );
     }
   };
@@ -1223,7 +1224,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
     } catch (error) {
       console.error("Failed to create admin:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to create admin"
+        error instanceof Error ? error.message : "Failed to create admin",
       );
     }
   };
@@ -1278,8 +1279,8 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                   branches.find((b) => b.id === editAdminData.branch_id)
                     ?.name || admin.branch,
               }
-            : admin
-        )
+            : admin,
+        ),
       );
 
       setShowEditAdminModal(false);
@@ -1288,7 +1289,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
     } catch (error) {
       console.error("Failed to update admin:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to update admin"
+        error instanceof Error ? error.message : "Failed to update admin",
       );
     }
   };
@@ -1301,7 +1302,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
       selectedBranches: driver.branches
         .map(
           (branchName: string) =>
-            branches.find((b) => b.name === branchName)?.id || ""
+            branches.find((b) => b.name === branchName)?.id || "",
         )
         .filter(Boolean),
     });
@@ -1347,12 +1348,12 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                 branches: editDriverData.selectedBranches
                   .map(
                     (branchId) =>
-                      branches.find((b) => b.id === branchId)?.name || ""
+                      branches.find((b) => b.id === branchId)?.name || "",
                   )
                   .filter(Boolean),
               }
-            : driver
-        )
+            : driver,
+        ),
       );
 
       setShowEditDriverModal(false);
@@ -1366,7 +1367,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
     } catch (error) {
       console.error("Failed to update driver:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to update driver"
+        error instanceof Error ? error.message : "Failed to update driver",
       );
     }
   };
@@ -1395,11 +1396,20 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
               {isSuperAdmin
                 ? "Super Admin"
                 : isAdmin
-                ? branches.find((b) => b.id === userBranches[0])?.name ??
-                  userBranches[0] ??
-                  "Admin"
-                : "Admin"}
+                  ? (branches.find((b) => b.id === userBranches[0])?.name ??
+                    userBranches[0] ??
+                    "Admin")
+                  : "Admin"}
             </Badge>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => navigate("/admin/live-map")}
+              className="font-medium"
+            >
+              <MapPin className="h-4 w-4 mr-2" />
+              Live Map
+            </Button>
             <Button
               variant="outline"
               size="sm"
@@ -1528,7 +1538,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                         size="sm"
                         onClick={() =>
                           setSelectedInvoices(
-                            (allInvoices || []).map((inv) => inv.id)
+                            (allInvoices || []).map((inv) => inv.id),
                           )
                         }
                         disabled={
@@ -1644,7 +1654,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                             const end = Math.min(
                               adminPagination.current_page *
                                 adminPagination.per_page,
-                              adminPagination.total_count
+                              adminPagination.total_count,
                             );
                             return `${start}-${end}`;
                           })()}{" "}
@@ -1747,7 +1757,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                   <input
                                     type="checkbox"
                                     checked={selectedInvoices.includes(
-                                      invoice.id
+                                      invoice.id,
                                     )}
                                     disabled={!invoice.is_acknowledged}
                                     onChange={(e) => {
@@ -1758,7 +1768,9 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                         ]);
                                       } else {
                                         setSelectedInvoices((prev) =>
-                                          prev.filter((id) => id !== invoice.id)
+                                          prev.filter(
+                                            (id) => id !== invoice.id,
+                                          ),
                                         );
                                       }
                                     }}
@@ -1928,7 +1940,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                             (Total: ₹
                             {filteredAllInvoices
                               .filter((inv) =>
-                                selectedInvoices.includes(inv.id)
+                                selectedInvoices.includes(inv.id),
                               )
                               .reduce((sum, inv) => sum + inv.amount, 0)
                               .toFixed(2)}
@@ -2137,7 +2149,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                               const end = Math.min(
                                 superAdminPagination.current_page *
                                   superAdminPagination.per_page,
-                                superAdminPagination.total_count
+                                superAdminPagination.total_count,
                               );
                               return `${start}-${end}`;
                             })()}{" "}
@@ -2178,7 +2190,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                           size="sm"
                           onClick={() =>
                             setSelectedInvoices(
-                              (allInvoices || []).map((inv) => inv.id)
+                              (allInvoices || []).map((inv) => inv.id),
                             )
                           }
                           disabled={
@@ -2214,7 +2226,9 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                   onChange={(e) => {
                                     if (e.target.checked) {
                                       setSelectedInvoices(
-                                        filteredAllInvoices.map((inv) => inv.id)
+                                        filteredAllInvoices.map(
+                                          (inv) => inv.id,
+                                        ),
                                       );
                                     } else {
                                       setSelectedInvoices([]);
@@ -2262,7 +2276,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                   <input
                                     type="checkbox"
                                     checked={selectedInvoices.includes(
-                                      invoice.id
+                                      invoice.id,
                                     )}
                                     disabled={!invoice.is_acknowledged}
                                     onChange={(e) => {
@@ -2273,7 +2287,9 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                         ]);
                                       } else {
                                         setSelectedInvoices((prev) =>
-                                          prev.filter((id) => id !== invoice.id)
+                                          prev.filter(
+                                            (id) => id !== invoice.id,
+                                          ),
                                         );
                                       }
                                     }}
@@ -2457,7 +2473,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                             (Total: ₹
                             {filteredAllInvoices
                               .filter((inv) =>
-                                selectedInvoices.includes(inv.id)
+                                selectedInvoices.includes(inv.id),
                               )
                               .reduce((sum, inv) => sum + inv.amount, 0)
                               .toFixed(2)}
@@ -2656,7 +2672,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                     <div className="space-y-4">
                       {(() => {
                         const branch = branches.find(
-                          (b) => b.id === selectedBranchDetails
+                          (b) => b.id === selectedBranchDetails,
                         );
                         const details = getBranchDetails(branch.name);
 
@@ -3451,8 +3467,8 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                           {csvData.file
                             ? csvData.file.name
                             : csvData.isDragOver
-                            ? "Drop the CSV file here"
-                            : "Drop your CSV file here, or click to browse"}
+                              ? "Drop the CSV file here"
+                              : "Drop your CSV file here, or click to browse"}
                         </p>
                         <Input
                           id="csv-upload"
@@ -3486,7 +3502,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                               setCsvData((prev) => ({ ...prev, file: null }));
                               // Reset file input
                               const fileInput = document.getElementById(
-                                "csv-upload"
+                                "csv-upload",
                               ) as HTMLInputElement;
                               if (fileInput) fileInput.value = "";
                             }}
@@ -3640,10 +3656,11 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                                   ...prev,
                                                   selectedBranches:
                                                     prev.selectedBranches.includes(
-                                                      branch.id
+                                                      branch.id,
                                                     )
                                                       ? prev.selectedBranches.filter(
-                                                          (b) => b !== branch.id
+                                                          (b) =>
+                                                            b !== branch.id,
                                                         )
                                                       : [
                                                           ...new Set([
@@ -3657,7 +3674,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                               <Check
                                                 className={`mr-2 h-4 w-4 ${
                                                   newTempDriver.selectedBranches.includes(
-                                                    branch.id
+                                                    branch.id,
                                                   )
                                                     ? "opacity-100"
                                                     : "opacity-0"
@@ -3676,11 +3693,11 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                     <div className="flex flex-wrap gap-2 p-3 bg-muted rounded-lg">
                                       {[
                                         ...new Set(
-                                          newTempDriver.selectedBranches
+                                          newTempDriver.selectedBranches,
                                         ),
                                       ].map((branchId) => {
                                         const branch = availableBranches.find(
-                                          (b) => b.id === branchId
+                                          (b) => b.id === branchId,
                                         );
                                         return branch ? (
                                           <div
@@ -3697,7 +3714,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                                   ...prev,
                                                   selectedBranches:
                                                     prev.selectedBranches.filter(
-                                                      (b) => b !== branchId
+                                                      (b) => b !== branchId,
                                                     ),
                                                 }))
                                               }
@@ -3785,7 +3802,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                   <Check
                                     className={`mr-2 h-4 w-4 ${
                                       csvData.assignedDrivers.includes(
-                                        driver.id
+                                        driver.id,
                                       )
                                         ? "opacity-100"
                                         : "opacity-0"
@@ -3831,7 +3848,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                           <div className="flex flex-wrap gap-2 p-3 bg-muted rounded-lg">
                             {csvData.assignedDrivers.map((driverId) => {
                               const driver = drivers.find(
-                                (d) => d.id === driverId
+                                (d) => d.id === driverId,
                               );
                               return driver ? (
                                 <div
@@ -4031,7 +4048,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                         <Check
                                           className={`mr-2 h-4 w-4 ${
                                             newDriver.selectedBranches.includes(
-                                              branch.id
+                                              branch.id,
                                             )
                                               ? "opacity-100"
                                               : "opacity-0"
@@ -4050,7 +4067,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                 {[...new Set(newDriver.selectedBranches)].map(
                                   (branchId) => {
                                     const branch = availableBranches.find(
-                                      (b) => b.id === branchId
+                                      (b) => b.id === branchId,
                                     );
                                     return branch ? (
                                       <div
@@ -4068,7 +4085,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                         </Button>
                                       </div>
                                     ) : null;
-                                  }
+                                  },
                                 )}
                               </div>
                             )}
@@ -4193,10 +4210,10 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                             ...prev,
                                             selectedBranches:
                                               prev.selectedBranches.includes(
-                                                branch.id
+                                                branch.id,
                                               )
                                                 ? prev.selectedBranches.filter(
-                                                    (b) => b !== branch.id
+                                                    (b) => b !== branch.id,
                                                   )
                                                 : [
                                                     ...new Set([
@@ -4210,7 +4227,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                         <Check
                                           className={`mr-2 h-4 w-4 ${
                                             editDriverData.selectedBranches.includes(
-                                              branch.id
+                                              branch.id,
                                             )
                                               ? "opacity-100"
                                               : "opacity-0"
@@ -4230,7 +4247,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                   ...new Set(editDriverData.selectedBranches),
                                 ].map((branchId) => {
                                   const branch = availableBranches.find(
-                                    (b) => b.id === branchId
+                                    (b) => b.id === branchId,
                                   );
                                   return branch ? (
                                     <div
@@ -4247,7 +4264,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                             ...prev,
                                             selectedBranches:
                                               prev.selectedBranches.filter(
-                                                (b) => b !== branchId
+                                                (b) => b !== branchId,
                                               ),
                                           }))
                                         }
@@ -4384,7 +4401,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                       <Badge key={branch} variant="outline">
                                         {branch}
                                       </Badge>
-                                    )
+                                    ),
                                   )
                                 ) : (
                                   <span className="text-sm text-muted-foreground">
@@ -4598,7 +4615,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                                 <AlertDialogAction
                                                   onClick={() =>
                                                     handleDeleteDriver(
-                                                      driver.id
+                                                      driver.id,
                                                     )
                                                   }
                                                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -4639,7 +4656,7 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
                                                 <AlertDialogAction
                                                   onClick={() =>
                                                     handleDeleteDriver(
-                                                      driver.id
+                                                      driver.id,
                                                     )
                                                   }
                                                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
