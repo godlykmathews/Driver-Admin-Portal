@@ -96,6 +96,7 @@ const LiveMap = () => {
 
   // Initialize map
   useEffect(() => {
+    if (loading) return;
     if (!mapContainerRef.current || mapRef.current) return;
 
     // Initialize the map
@@ -138,7 +139,7 @@ const LiveMap = () => {
       }
       document.head.removeChild(style);
     };
-  }, []);
+  }, [loading]);
 
   // Fetch driver locations
   const fetchDriverLocations = async (isAutoRefresh = false) => {
