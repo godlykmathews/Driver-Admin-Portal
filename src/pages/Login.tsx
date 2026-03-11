@@ -3,7 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Truck, Loader2, Info } from "lucide-react";
 import { apiService } from "@/lib/api";
@@ -20,7 +26,7 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!credentials.username || !credentials.password) {
       toast.error("Please enter both username and password");
       return;
@@ -30,25 +36,35 @@ const Login = () => {
 
     try {
       const response = await apiService.login(credentials);
-      
+
       // Store user data in localStorage
-      localStorage.setItem('user_name', response.user.name);
-      localStorage.setItem('user_role', response.user.role);
-      localStorage.setItem('user_branches', JSON.stringify(response.user.branches));
-      localStorage.setItem('user_id', response.user.id);
-      localStorage.setItem('user_email', response.user.email);
-      localStorage.setItem('is_active', response.user.is_active.toString());
-      
+      localStorage.setItem("user_name", response.user.name);
+      localStorage.setItem("user_role", response.user.role);
+      localStorage.setItem(
+        "user_branches",
+        JSON.stringify(response.user.branches),
+      );
+      localStorage.setItem("user_id", response.user.id);
+      localStorage.setItem("user_email", response.user.email);
+      localStorage.setItem("is_active", response.user.is_active.toString());
+
       toast.success("Login successful!");
-      
+
       // Route based on role
-      if (response.user.role === 'driver') {
+      if (response.user.role === "driver") {
         navigate("/invoices");
-      } else if (response.user.role === 'admin' || response.user.role === 'super_admin') {
+      } else if (
+        response.user.role === "admin" ||
+        response.user.role === "super_admin"
+      ) {
         navigate("/admin");
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Login failed. Please check your credentials.");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Login failed. Please check your credentials.",
+      );
     } finally {
       setLoading(false);
     }
@@ -60,13 +76,10 @@ const Login = () => {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-4 text-center">
-          <div className="mx-auto w-16 h-16 bg-primary flex items-center justify-center border-2 border-primary-foreground/20">
-            <div className="text-primary-foreground font-bold text-xl tracking-wider">
-              DL
-            </div>
+          <div className="mx-auto w-32 h-32 flex items-center justify-center border-2 border-white">
+            <img src="/logo.png" alt="Dlive Logo" />
           </div>
           <div>
-            <CardTitle className="text-2xl font-serif">Dlive</CardTitle>
             <CardDescription className="text-base mt-2 font-medium">
               Delivery Management System
             </CardDescription>
@@ -76,13 +89,15 @@ const Login = () => {
           {/* Production login form only. Quick-login dev UI removed. */}
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username / Phone</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
                 type="text"
                 placeholder="Username"
                 value={credentials.username}
-                onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+                onChange={(e) =>
+                  setCredentials({ ...credentials, username: e.target.value })
+                }
                 disabled={loading}
                 className="h-12"
               />
@@ -94,12 +109,18 @@ const Login = () => {
                 type="password"
                 placeholder="Password"
                 value={credentials.password}
-                onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                onChange={(e) =>
+                  setCredentials({ ...credentials, password: e.target.value })
+                }
                 disabled={loading}
                 className="h-12"
               />
             </div>
-            <Button type="submit" className="w-full h-12 text-base" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full h-12 text-base"
+              disabled={loading}
+            >
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

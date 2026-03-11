@@ -219,10 +219,8 @@ const InvoiceListGrouped = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary flex items-center justify-center border border-primary-foreground/20 flex-shrink-0">
-                <div className="text-primary-foreground font-bold text-xs sm:text-sm tracking-wider">
-                  DL
-                </div>
+              <div className="w-16 h-16 sm:w-10 sm:h-10 flex items-center justify-center border border-primary-foreground/20 flex-shrink-0">
+                <img src="/logo.png" alt="" />
               </div>
               <div className="min-w-0 flex-1">
                 <h1 className="text-base sm:text-lg font-bold font-serif truncate">

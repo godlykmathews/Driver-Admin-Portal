@@ -1377,10 +1377,8 @@ INV-2024-002,Another Store,456 Business Ave,890.50,2024-10-16,North Branch`;
       <header className="bg-card border-b-2 border-border sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-primary flex items-center justify-center border border-primary-foreground/20">
-              <div className="text-primary-foreground font-bold text-sm tracking-wider">
-                DL
-              </div>
+            <div className="w-16 h-16 flex items-center justify-center border border-primary-foreground/20">
+              <img src="/logo.png" alt="" />
             </div>
             <div>
               <h1 className="text-lg font-bold font-serif">
